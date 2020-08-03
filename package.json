@@ -1,0 +1,48 @@
+{
+  "name": "dohamaps",
+  "productName": "dohamaps",
+  "version": "1.0.0",
+  "description": "My Electron application description",
+  "main": "electron/index.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "echo \"No linting configured\""
+  },
+  "keywords": [],
+  "author": {
+    "name": "aegooby",
+    "email": "aegooby@gmail.com"
+  },
+  "license": "MIT",
+  "config": {
+    "forge": "./forge.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aegooby/dohamaps.git"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.0",
+    "fs-extra": "^9.0.1",
+    "jquery": "^3.5.1",
+    "node-gyp": "^7.0.0",
+    "python-shell": "^2.0.1",
+    "update-electron-app": "^1.5.0"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^6.0.0-beta.52",
+    "@electron-forge/maker-deb": "^6.0.0-beta.52",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.52",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.52",
+    "@electron-forge/maker-zip": "^6.0.0-beta.52",
+    "@electron-forge/publisher-github": "^6.0.0-beta.52",
+    "electron": "^9.1.1",
+    "fs-extra": "^9.0.1",
+    "jquery": "^3.5.1",
+    "node-gyp": "^7.0.0",
+    "python-shell": "^2.0.1"
+  }
+}
