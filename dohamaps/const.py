@@ -13,6 +13,10 @@ def __constattr__(arg):
     return receptor();
 
 class info(object):
+    """
+        parameters initialized to `None` should be added in
+        using util.info_json()
+    """
     hist_len = None;
     pred_len = None;
     clip_len = None;
