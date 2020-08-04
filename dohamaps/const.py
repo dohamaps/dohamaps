@@ -19,7 +19,7 @@ class info(object):
     clip_len = hist_len + pred_len;
     num_scales = 4;
     disc_lrate = 5e-5;
-    gen_lrate = 5e-5;
+    gen_lrate = 1e-5;
     train_dim = (64, 64);
     pred_dim = (415, 350);
     scale_min = 1.0 / (2.0 ** (num_scales - 1));
