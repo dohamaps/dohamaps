@@ -29,6 +29,7 @@ def usage():
     util.__sysprint__("--clear-save   : clears save directory");
     util.__sysprint__("--clear-clips  : clears clips directory");
     util.__sysprint__("--clear-all    : clears all saved directories");
+    util.__sysprint__("--no-gpu       : disables use of GPU");
     util.__sysprint__("--log-html     : generates logs in HTML mode for electron");
 
 def main():
@@ -123,6 +124,8 @@ def main():
             clear_cache = True;
             clear_save = True;
             clear_clips = True;
+        if opt in ("--no-gpu"):
+            tf.config.set_visible_devices([  ], "GPU");
         if opt in ("--log-html"):
             const.log(const.log_mode.html);
 
