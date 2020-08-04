@@ -49,6 +49,7 @@ def main():
             "clear-save",
             "clear-clips",
             "clear-all",
+            "no-gpu",
             "log-html"
         ];
         opts, _ = getopt.getopt(sys.argv[1:], "", optlist);
