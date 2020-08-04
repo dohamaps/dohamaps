@@ -137,6 +137,8 @@ def main():
 
     util.__sysprint__("tensorflow version: ", tf.__version__);
 
+    util.info_json("info.json");
+
     if clear_cache:
         util.clear_dir(info.cache_path);
     if clear_clips:

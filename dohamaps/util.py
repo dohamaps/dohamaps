@@ -2,6 +2,9 @@ import  tensorflow  as tf
 import  numpy       as np
 import  os
 import  shutil
+import  json
+
+from    ast         import literal_eval     as parse
 
 def get_dir(directory):
     """
@@ -55,3 +58,12 @@ def clear_dir(directory):
                 shutil.rmtree(path);
         except Exception as exn:
             __sysprint__(exn);
+
+def info_json(path):
+    with open(path) as file:
+        data = json.load(file);
+    for (key, value) in data.items():
+        setattr(const.info, key, parse(value));
+    setattr(const.info, "scale_min",
+            1.0 / (2.0 ** (const.info.num_scales - 1)));
+    setattr(const.info, "clip_len", const.info.hist_len + const.info.pred_len);
