@@ -28,6 +28,7 @@ def usage():
     util.__sysprint__("--clear-cache  : clears cache directory");
     util.__sysprint__("--clear-save   : clears save directory");
     util.__sysprint__("--clear-clips  : clears clips directory");
+    util.__sysprint__("--clear-pred   : clears prediction clip directory");
     util.__sysprint__("--clear-all    : clears all saved directories");
     util.__sysprint__("--no-gpu       : disables use of GPU");
     util.__sysprint__("--log-html     : generates logs in HTML mode for electron");
@@ -48,6 +49,7 @@ def main():
             "clear-cache",
             "clear-save",
             "clear-clips",
+            "clear-pred",
             "clear-all",
             "no-gpu",
             "log-html"
@@ -61,6 +63,7 @@ def main():
     clear_cache = False;
     clear_save = False;
     clear_clips = False;
+    clear_pred = False;
     verbose = False;
 
     data_dir = "data";
@@ -121,6 +124,8 @@ def main():
             clear_save = True;
         if opt in ("--clear-clips"):
             clear_clips = True;
+        if opt in ("--clear-pred"):
+            clear_pred = True;
         if opt in ("--clear-all"):
             clear_cache = True;
             clear_save = True;
@@ -136,6 +141,8 @@ def main():
         util.clear_dir(info.cache_path);
     if clear_clips:
         util.clear_dir(info.clips_path);
+    if clear_pred:
+        util.clear_dir(os.path.join(info.clips_path, "pred"));
     if clear_save:
         util.clear_dir(info.save_path);
 
