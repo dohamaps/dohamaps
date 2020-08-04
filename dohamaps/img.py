@@ -170,7 +170,8 @@ def process(num_clips, load_path, save_path):
 
     util.__sysprint__("processed prediction clip");
     time.sleep(1);
-    util.__sysprint__("processing training/testing clips...");
+    if num_clips > 0:
+        util.__sysprint__("processing training/testing clips...");
 
     n_existing = len(glob(os.path.join(save_path, "*.npz")));
     for i in range(n_existing, n_existing + num_clips):
