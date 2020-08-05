@@ -11,7 +11,7 @@ image.setTemplateImage(true);
 
 app.dock.setIcon(image);
 
-const pythonPath = path.join(__dirname, "../venv/bin/python3");
+let execPath = path.join(__dirname, "../venv/bin/python3");
 const scriptPath = path.join(__dirname, "../");
 const scriptName = "main.py";
 
@@ -23,7 +23,7 @@ function __sysprint__(value) {
 
 let loadOptions = {
     mode: "text",
-    pythonPath: pythonPath,
+    pythonPath: execPath,
     pythonOptions: ["-u"],
     scriptPath: scriptPath,
     args: [ "--process=", "--data-dir=", "--log-html" ]
@@ -31,7 +31,7 @@ let loadOptions = {
 
 let trainOptions = {
     mode: "text",
-    pythonPath: pythonPath,
+    pythonPath: execPath,
     pythonOptions: ["-u"],
     scriptPath: scriptPath,
     args: [ "--train=", "--batch-size=", "--log-html" ]
@@ -39,7 +39,7 @@ let trainOptions = {
 
 let testOptions = {
     mode: "text",
-    pythonPath: pythonPath,
+    pythonPath: execPath,
     pythonOptions: ["-u"],
     scriptPath: scriptPath,
     args: [ "--test=", "--batch-size=", "--log-html" ]
@@ -47,7 +47,7 @@ let testOptions = {
 
 let predOptions = {
     mode: "text",
-    pythonPath: pythonPath,
+    pythonPath: execPath,
     pythonOptions: ["-u"],
     scriptPath: scriptPath,
     args: [ "--predict", "--log-html" ]
