@@ -1,4 +1,4 @@
-# `dohamaps` [![](https://gist.githubusercontent.com/dohamaps/e2f18ef193c7306691e9bb8b99033a5b/raw/a9db4b65b2c801dc3ff45a1ece2ac1c379b48cd2/dohamaps-shield.svg)](https://github.com/dohamaps/dohamaps/)
+# dohamaps
 [![](https://img.shields.io/badge/pypi-v1.1.2-brightgreen)](https://pypi.org/project/dohamaps/)
 
 AI are supposed to steal your jobs. If your job is to do this: 
