@@ -1,6 +1,7 @@
 
 const { ipcRenderer } = require("electron");
 const path = require("path");
+const homedir = require("os").homedir();
 
 let loadPath = document.getElementById("load-path");
 let loadNumClips = document.getElementById("load-num-clips");
@@ -141,7 +142,7 @@ predSubmitOriginal.addEventListener("click", function () {
 
 predDownload.addEventListener("click", function() {
     if (!predDownload.classList.contains("disabled")) {
-        ipcRenderer.send("download", [ "../save/pred/pred.png" ]);
+        ipcRenderer.send("download", [ path.join(homedir, "./dohamaps/pred/pred.png") ]);
     }
 });
 
@@ -164,7 +165,7 @@ ipcRenderer.on("pred", function (event, arg) {
     disableLoading();
     predPrint.style.display = "none";
     let predImg = document.createElement("img");
-    predImg.src = "../save/pred/pred.png";
+    predImg.src = path.join(homedir, ".dohamaps/pred/pred.png");
     predImg.height = 400;
     predImg.classList.add("pred-img");
     predImgDisplay.classList.add("pred-img-active");

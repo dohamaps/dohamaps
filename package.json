@@ -2,7 +2,7 @@
   "name": "dohamaps",
   "productName": "dohamaps",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Generative adversarial urban growth prediction of Doha.",
   "main": "electron/index.js",
   "scripts": {
     "start": "electron-forge start",
