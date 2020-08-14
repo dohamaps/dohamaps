@@ -2,6 +2,7 @@
 [![](https://img.shields.io/badge/pypi-v1.1.2-brightgreen)](https://pypi.org/project/dohamaps/)
 
 AI are supposed to steal your jobs. If your job is to do this: 
+
 ![](https://i.imgur.com/71VPyOK.jpg)
 
 then `dohamaps` will steal your job. Technically it can be used for any future video frame predictions, but it's called `dohamaps` so it's for Doha maps. If you use it for anything else your computer will explode. Just kidding. Or maybe not. I haven't tried.
