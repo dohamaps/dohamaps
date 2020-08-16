@@ -5,6 +5,6 @@
     "disc_lrate": "0.000005",
     "gen_lrate": "0.00008",
     "train_dim": "(64, 64)",
-    "pred_dim": "(415, 350)",
+    "pred_dim": "(664, 560)",
     "scale_up": "2.0"
 }
