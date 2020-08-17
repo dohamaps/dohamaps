@@ -3,7 +3,7 @@
     "pred_len": "16",
     "num_scales": "4",
     "disc_lrate": "0.000005",
-    "gen_lrate": "0.00002",
+    "gen_lrate": "0.000005",
     "train_dim": "(64, 64)",
     "pred_dim": "(664, 560)",
     "scale_up": "2.0"
