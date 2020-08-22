@@ -1,7 +1,7 @@
 # dohamaps
 [![](https://img.shields.io/badge/pypi-v1.1.2-brightgreen)](https://pypi.org/project/dohamaps/)
 
-![](https://i.imgur.com/tF4bT7h.png)
+![](https://i.imgur.com/YtSWbyg.png)
 
 It includes an associated [`python3` package](https://pypi.org/project/dohamaps/) that can be downloaded on its own and used from the command line. It is also included as a GUI [`electron`](https://electronjs.org) app that can run training, testing, and prediction. How do you run it?
 ## Instructions
