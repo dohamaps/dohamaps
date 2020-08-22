@@ -13,16 +13,53 @@
   },
   "keywords": [],
   "author": {
-    "name": "aegooby",
-    "email": "aegooby@gmail.com"
+    "name": "dohamaps",
+    "email": "dohamaps20@gmail.com"
   },
   "license": "MIT",
   "config": {
-    "forge": "./forge.config.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/aegooby/dohamaps.git"
+    "forge": {
+      "github_repository": {
+          "name": "dohamaps",
+          "owner": "dohamaps"
+      },
+      "packagerConfig": { "icon": "./electron/icon.icns" },
+      "publishers": [
+          {
+              "name": "@electron-forge/publisher-github",
+              "config": {
+                  "repository": {
+                      "name": "dohamaps",
+                      "owner": "dohamaps"
+                  },
+                  "prerelease": false,
+                  "draft": false
+              }
+          }
+      ],
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "dohamaps"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
@@ -33,13 +70,12 @@
     "update-electron-app": "^1.5.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.52",
-    "@electron-forge/maker-deb": "^6.0.0-beta.52",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.52",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.52",
-    "@electron-forge/maker-zip": "^6.0.0-beta.52",
-    "@electron-forge/publisher-github": "^6.0.0-beta.52",
-    "electron": "^9.1.1",
+    "@electron-forge/cli": "6.0.0-beta.52",
+    "@electron-forge/maker-deb": "6.0.0-beta.52",
+    "@electron-forge/maker-rpm": "6.0.0-beta.52",
+    "@electron-forge/maker-squirrel": "6.0.0-beta.52",
+    "@electron-forge/maker-zip": "6.0.0-beta.52",
+    "electron": "9.2.1",
     "electron-prebuilt-compile": "8.2.0"
   }
 }
