@@ -3,7 +3,8 @@
 
 ![](https://i.imgur.com/YtSWbyg.png)
 
-It includes an associated [`python3` package](https://pypi.org/project/dohamaps/) that can be downloaded on its own and used from the command line. It is also included as a GUI [`electron`](https://electronjs.org) app that can run training, testing, and prediction. How do you run it?
+`dohamaps` is a program for generative adversarial prediction of urban growth in Doha.
+
 ## Instructions
 ### Setup
 To use this from the command line, first clone the repository, either from GitHub Desktop or the command line
