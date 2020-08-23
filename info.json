@@ -1,8 +1,8 @@
 {
-    "hist_len": "8",
-    "pred_len": "16",
+    "hist_len": "11",
+    "pred_len": "19",
     "num_scales": "4",
-    "disc_lrate": "0.000001",
+    "disc_lrate": "0.0000005",
     "gen_lrate": "0.0000085",
     "train_dim": "(64, 64)",
     "pred_dim": "(664, 560)",
