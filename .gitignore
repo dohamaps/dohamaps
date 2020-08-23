@@ -234,7 +234,6 @@ cache/
 save/
 clips/
 venv/
-forge.config.js
 out/
 
 package-lock.json

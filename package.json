@@ -1,81 +1,39 @@
 {
-  "name": "dohamaps",
-  "productName": "dohamaps",
-  "version": "1.0.0",
-  "description": "Generative adversarial urban growth prediction of Doha.",
-  "main": "electron/index.js",
-  "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
-  },
-  "keywords": [],
-  "author": {
     "name": "dohamaps",
-    "email": "dohamaps20@gmail.com"
-  },
-  "license": "MIT",
-  "config": {
-    "forge": {
-      "github_repository": {
-          "name": "dohamaps",
-          "owner": "dohamaps"
-      },
-      "packagerConfig": { "icon": "./electron/icon.icns" },
-      "publishers": [
-          {
-              "name": "@electron-forge/publisher-github",
-              "config": {
-                  "repository": {
-                      "name": "dohamaps",
-                      "owner": "dohamaps"
-                  },
-                  "prerelease": false,
-                  "draft": false
-              }
-          }
-      ],
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "dohamaps"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
+    "productName": "dohamaps",
+    "version": "1.0.0",
+    "description": "Generative adversarial urban growth prediction of Doha.",
+    "main": "electron/index.js",
+    "scripts": {
+        "start": "electron-forge start",
+        "package": "electron-forge package",
+        "make": "electron-forge make",
+        "publish": "electron-forge publish",
+        "lint": "echo \"No linting configured\""
+    },
+    "keywords": [],
+    "author": {
+        "name": "dohamaps",
+        "email": "dohamaps20@gmail.com"
+    },
+    "license": "MIT",
+    "config": {
+        "forge": "./forge.config.js"
+    },
+    "dependencies": {
+        "electron-squirrel-startup": "^1.0.0",
+        "fs-extra": "^9.0.1",
+        "jquery": "^3.5.1",
+        "node-gyp": "^7.0.0",
+        "python-shell": "^2.0.1",
+        "update-electron-app": "^1.5.0"
+    },
+    "devDependencies": {
+        "@electron-forge/cli": "6.0.0-beta.52",
+        "@electron-forge/maker-deb": "6.0.0-beta.52",
+        "@electron-forge/maker-rpm": "6.0.0-beta.52",
+        "@electron-forge/maker-squirrel": "6.0.0-beta.52",
+        "@electron-forge/maker-zip": "6.0.0-beta.52",
+        "electron": "9.2.1"
     }
-  },
-  "dependencies": {
-    "electron-squirrel-startup": "^1.0.0",
-    "fs-extra": "^9.0.1",
-    "jquery": "^3.5.1",
-    "node-gyp": "^7.0.0",
-    "python-shell": "^2.0.1",
-    "update-electron-app": "^1.5.0"
-  },
-  "devDependencies": {
-    "@electron-forge/cli": "6.0.0-beta.52",
-    "@electron-forge/maker-deb": "6.0.0-beta.52",
-    "@electron-forge/maker-rpm": "6.0.0-beta.52",
-    "@electron-forge/maker-squirrel": "6.0.0-beta.52",
-    "@electron-forge/maker-zip": "6.0.0-beta.52",
-    "electron": "9.2.1",
-    "electron-prebuilt-compile": "8.2.0"
-  }
 }
