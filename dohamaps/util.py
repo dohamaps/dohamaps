@@ -31,7 +31,7 @@ def __sysprint__(*args):
     if (const.__log__ == const.log_mode.none):
         pass;
     if (const.__log__ == const.log_mode.bash):
-        print("\033[36m", "  <dohamaps> ", "\033[m", *args);
+        print("\033[0;1;36m" + "  <dohamaps> " + "\033[0m", *args);
     if (const.__log__ == const.log_mode.html):
         print(*args);
 
