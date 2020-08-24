@@ -1,5 +1,5 @@
 # dohamaps
-[![](https://img.shields.io/badge/pypi-v1.1.2-brightgreen)](https://pypi.org/project/dohamaps/)
+[![](https://img.shields.io/badge/pypi-v1.1.4-brightgreen)](https://pypi.org/project/dohamaps/)
 
 ![](https://i.imgur.com/YtSWbyg.png)
 

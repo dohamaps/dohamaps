@@ -7,7 +7,7 @@ with open(os.path.join("dohamaps", "README.md"), "r") as readme:
 setuptools.setup \
 (
     name = "dohamaps",
-    version = "1.1.2",
+    version = "1.1.4",
     author = "dohamaps",
     author_email = "dohamaps20@gmail.com",
     description = "Generative adversarial urban growth prediction of Doha.",
