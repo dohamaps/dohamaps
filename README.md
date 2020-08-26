@@ -7,7 +7,10 @@
 
 ## Instructions
 ### Setup
-To use this from the command line, first clone the repository, either from GitHub Desktop or the command line
+If you are on MacOS, install command line tools
+
+    xcode-select --install
+Clone the repository, either from GitHub Desktop or the command line
 
     git clone https://github.com/dohamaps/dohamaps.git
 Then install `python3.7` from [here](https://www.python.org/downloads/release/python-370/), and then create a virtual environment in the `dohamaps` directory
