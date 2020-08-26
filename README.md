@@ -30,6 +30,10 @@ Most commonly, to process, train, test, and predict, you will want to run someth
     python3 main.py --train=<epochs> --batch-size=<size>
     python3 main.py --test=<steps>
     python3 main.py --predict
+To run a pre-trained model prediction, you will want to run,
+
+    python3 main.py --predict --load-weights=<.../path/to/weights>
+All outputs (cache, clips, predictions, and saved models) are saved in `~/.dohamaps/`. This is a hidden folder, so navigate to it with Terminal or using `cmd` + `shift` + `.` on MacOS.
 ### As a GUI app
 Install `node` from [here](https://nodejs.org/en/download/), and then in the `dohamaps` folder, run
 
