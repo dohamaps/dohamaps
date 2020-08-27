@@ -128,7 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-*.npz
+*.npy
 .DS_Store
 *.pem
 aws.sh
