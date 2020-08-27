@@ -20,8 +20,8 @@ export function gdl(yTrue, yPred, c)
     assert.deepEqual(yTrue.length, yPred.length);
     const losses = [];
     for (let i = 0; i < yPred.length; ++i)
-        const yTrueD = tf.image.imageGradients(yTrue[i]);
-        const yPredD = tf.image.imageGradients(yPred[i]);
+        const yTrueD = image.imageGradients(yTrue[i]);
+        const yPredD = image.imageGradients(yPred[i]);
 
         const gDiffY = tf.abs(tf.abs(yTrueD[0]) - tf.abs(yPredD[0]));
         const gDiffX = tf.abs(tf.abs(yTrueD[1]) - tf.abs(yPredD[1]));
