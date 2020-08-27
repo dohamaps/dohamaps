@@ -35,7 +35,7 @@ export function gdl(yTrue, yPred, c)
 }
 
 
-function lp(yTrue, yPred, lNum)
+export function lp(yTrue, yPred, lNum)
 {
     assert.deepEqual(yTrue.length, yPred.length);
     const losses = [  ];
@@ -46,7 +46,7 @@ function lp(yTrue, yPred, lNum)
 }
 
 
-function combined(yTrue, yPred, labels, alpha, beta, gamma, lNum)
+export function combined(yTrue, yPred, labels, alpha, beta, gamma, lNum)
 {
     assert.deepEqual(yTrue.length, labels.length);
     assert.deepEqual(yPred.length, labels.length);
