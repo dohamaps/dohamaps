@@ -1,49 +1,89 @@
 
 import * as tf from "@tensorflow/tfjs-node";
-import * as osPath from "path";
 import * as assert from "assert";
-import * as glob from "glob";
 
 import * as io from "./io";
 import * as image from "./image";
+import * as util from "./util";
 
-export class Dataset
+class Dataset
 {
-    constructor(histLen, predLen, mode, dim)
+    constructor(args)
     {
-        this.clipLen = histLen + predLen;
-        this.histLen = histLen;
-        this.predLen = predLen;
-        this.mode = mode;
-        assert.deepEqual(dim.length, 2);
-        this.height = dim[0];
-        this.width = dim[1];
-        this.dataset = null;
+        this.histLen = args.histLen;
+        this.predLen = args.predLen;
+        this.clipLen = this.histLen + this.predLen;
+        this.numScales = args.numScales;
+        this.dimensions = args.dimensions;
+        assert.deepEqual(this.dimensions.length, 2);
+        this.height = this.dimensions[0];
+        this.width = this.dimensions[1];
+        this.channels = args.channels;
+
+        this.backend = null;
     }
-    globFiles(path, pattern)
+    async globFiles(path, pattern)
     {
-        this.dataset = tf.data.array(glob.sync(osPath.join(path, pattern)))
+        this.backend = tf.data.array(await util.glob(path, pattern));
     }
     batch(batchSize)
     {
-        this.dataset = this.dataset.batch(batchSize, false);
+        this.backend = this.backend.batch(batchSize, false);
     }
     async loadTensors()
     {
-        async function pathToTensor(path)
+        async function map(path)
         {
-            try { return image.npyToTensor(await io.loadFile(path)); }
+            try { return util.tnsToTensor(await io.loadFile(path)); }
             catch (error) { console.log(error); }
         }
-        try { this.dataset = await this.dataset.mapAsync(pathToTensor); }
-        catch (error) { console.log(error) }
+        this.backend = this.backend.mapAsync(map);
+    }
+    splitTensorsTrain()
+    {
+        let histLen = this.histLen;
+        let predLen = this.predLen;
+        function map(tensor)
+        {
+            const shape = tensor.shape;
+            const histStart = [ 0, 0, 0, 0 ];
+            const histSize = [ shape[0], shape[1], shape[2], histLen ];
+            const predStart = [ 0, 0, 0, histLen ];
+            const predSize = [ shape[0], shape[1], shape[2], predLen ];
+
+            const history = tensor.slice(histStart, histSize);
+            const groundTruth = tensor.slice(predStart, predSize);
+            return [ history, groundTruth ];
+        }
+        this.backend = this.backend.map(map);
+    }
+    scale()
+    {
+        let numScales = this.numScales;
+        function map(pair)
+        {
+            const history = pair[0];
+            const groundTruth = pair[1];
+
+            const histScales = [  ];
+            const gtScales = [  ];
+
+            for (let i = 0; i < numScales; ++i)
+            {
+                histScales.push(image.resize(history, i, numScales));
+                gtScales.push(image.resize(groundTruth, i, numScales));
+            }
+            return [ histScales, gtScales ];
+        }
+        this.backend = this.backend.map(map);
     }
     prefetch()
     {
-        this.dataset = this.dataset.prefetch(1);
-    }
-    tfDataset()
-    {
-        return this.dataset;
+        this.backend = this.backend.prefetch(1);
     }
 };
+
+export function dataset(args)
+{
+    return new Dataset(args);
+}

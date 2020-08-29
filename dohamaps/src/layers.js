@@ -55,7 +55,7 @@ export function upSampling2d(options)
 {
     const config =
     {
-        size: options.size ? options.size : 2,
+        size: options.size ? options.size : [ 2, 2 ],
         dataFormat: "channelsLast",
     }
     return tf.layers.upSampling2d(config);
@@ -63,29 +63,43 @@ export function upSampling2d(options)
 
 class Block extends tf.layers.Layer
 {
-    constructor(layerList)
+    constructor(layerList, name)
     {
-        super.constructor();
+        super({ name: "Block_" + name });
         this.layerList = layerList;
     }
-    apply(inputs)
+    call(inputs, kwargs)
     {
-        super.apply(inputs);
-        var outputs = inputs;
-        for (let layer of this.layerList)
-            outputs = layer.apply(outputs);
-        return outputs;
+        this.invokeCallHook(inputs, kwargs);
+        let layerList = this.layerList;
+        function tidy()
+        {
+            var outputs = inputs;
+            for (let layer of layerList)
+                outputs = layer.apply(outputs);
+            return outputs;
+        }
+        return tf.tidy("layers.Block.apply", tidy);
     }
     computeOutputShape(inputShape)
     {
-        outputShape = inputShape;
-        for (let layer of this.layerList)
-            outputShape = layer.computeOutputShape(outputShape);
-        return outputShape;
+        let layerList = this.layerList;
+        function tidy()
+        {
+            var outputShape = inputShape;
+            for (let layer of layerList)
+                outputShape = layer.computeOutputShape(outputShape);
+            return outputShape;
+        }
+        return tf.tidy("layers.Block.computeOutputShape", tidy);
+    }
+    static get className()
+    {
+        return "Block";
     }
 };
 
-export function block(layerList)
+export function block(layerList, name)
 {
-    return new Block(layerList);
+    return new Block(layerList, name);
 }
