@@ -3,7 +3,7 @@ import * as tf from "@tensorflow/tfjs-node";
 
 import * as image from "./image";
 
-export function psnr(yTrue, yPred)
+function psnrFunction(yTrue, yPred)
 {
     function tidy()
     {
@@ -12,7 +12,7 @@ export function psnr(yTrue, yPred)
     return tf.tidy("metrics.psnr", tidy);
 }
 
-export function sharpdiff(yTrue, yPred)
+function sharpdiffFunction(yTrue, yPred)
 {
     function tidy()
     {
@@ -41,3 +41,6 @@ export function sharpdiff(yTrue, yPred)
     }
     return tf.tidy("metrics.sharpdiff", tidy);
 }
+
+export const psnr = { name: "psnr", apply: psnrFunction };
+export const sharpdiff = { name: "sharpdiff", apply: sharpdiffFunction };

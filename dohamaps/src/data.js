@@ -43,13 +43,14 @@ class Dataset
     {
         let histLen = this.histLen;
         let predLen = this.predLen;
+        let channels = this.channels;
         function map(tensor)
         {
             const shape = tensor.shape;
             const histStart = [ 0, 0, 0, 0 ];
-            const histSize = [ shape[0], shape[1], shape[2], histLen ];
-            const predStart = [ 0, 0, 0, histLen ];
-            const predSize = [ shape[0], shape[1], shape[2], predLen ];
+            const histSize = [ -1, -1, -1, histLen * channels ];
+            const predStart = [ 0, 0, 0, histLen * channels ];
+            const predSize = [ -1, -1, -1, predLen * channels ];
 
             const history = tensor.slice(histStart, histSize);
             const groundTruth = tensor.slice(predStart, predSize);

@@ -16,6 +16,7 @@ export function conv2d(options)
         useBias: true,
         kernelInitializer: initializers.truncatedNormal(),
         biasInitializer: initializers.constant(),
+        inputShape: options.inputShape
     };
     return tf.layers.conv2d(config);
 }
@@ -61,45 +62,102 @@ export function upSampling2d(options)
     return tf.layers.upSampling2d(config);
 }
 
-class Block extends tf.layers.Layer
+class Concat extends tf.layers.Layer
 {
-    constructor(layerList, name)
+    constructor(axis, name)
     {
-        super({ name: "Block_" + name });
-        this.layerList = layerList;
+        super({ name: "Concat_" + name });
+        this.axis = axis;
     }
     call(inputs, kwargs)
     {
         this.invokeCallHook(inputs, kwargs);
-        let layerList = this.layerList;
+        let axis = this.axis;
         function tidy()
         {
-            var outputs = inputs;
-            for (let layer of layerList)
-                outputs = layer.apply(outputs);
-            return outputs;
+            return tf.concat(inputs, axis);
         }
-        return tf.tidy("layers.Block.apply", tidy);
+        return tf.tidy("layers.Concat.apply", tidy);
     }
-    computeOutputShape(inputShape)
+    computeOutputShape(inputShapes)
     {
-        let layerList = this.layerList;
+        let axis = this.axis;
         function tidy()
         {
-            var outputShape = inputShape;
-            for (let layer of layerList)
-                outputShape = layer.computeOutputShape(outputShape);
+            var outputShape = null;
+            for (let shape of inputShapes)
+            {
+                if (!outputShape)
+                    outputShape = shape.slice();
+                else
+                    if (axis < 0)
+                        outputShape[shape.length + axis] += shape[shape.length + axis];
+                    else
+                        outputShape[axis] += shape[axis];
+            }
             return outputShape;
         }
-        return tf.tidy("layers.Block.computeOutputShape", tidy);
+        return tf.tidy("layers.Concat.computeOutputShape", tidy);
     }
     static get className()
     {
-        return "Block";
+        return "Concat";
     }
 };
+
+class Stack extends tf.layers.Layer
+{
+    constructor(name)
+    {
+        super({ name: "Stack_" + name });
+        this.axis = axis;
+    }
+    call(inputs, kwargs)
+    {
+        this.invokeCallHook(inputs, kwargs);
+        function tidy()
+        {
+            return tf.stack(inputs);
+        }
+        return tf.tidy("layers.Stack.apply", tidy);
+    }
+    computeOutputShape(inputShapes)
+    {
+        function tidy()
+        {
+            const length = inputShapes.length;
+            return [ length ].concat(inputShapes[0].shape);
+        }
+        return tf.tidy("layers.Stack.computeOutputShape", tidy);
+    }
+    static get className()
+    {
+        return "Stack";
+    }
+};
+
+export function stack(name = "")
+{
+    return new Stack(name);
+}
 
 export function block(layerList, name)
 {
     return new Block(layerList, name);
+}
+
+export function concat(axis, name = "")
+{
+    return new Concat(axis, name);
+}
+
+export function input(options)
+{
+    const config =
+    {
+        batchInputShape: options.shape,
+        dtype: "float32",
+        sparse: false,
+    };
+    return tf.layers.inputLayer(config);
 }

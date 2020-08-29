@@ -92,8 +92,8 @@ export function imageGradients(tensor)
 
         const beginHeight = [ 0, 1, 0, 0 ];
         const beginWidth = [ 0, 0, 1, 0 ];
-        const sizeHeight = [ batchSize, height - 1, width, channels ];
-        const sizeWidth = [ batchSize, height, width - 1, channels ];
+        const sizeHeight = [ -1, height - 1, width, -1 ];
+        const sizeWidth = [ -1, -1, width - 1, -1 ];
         const begin = [ 0, 0, 0, 0 ];
 
         var dy = tf.sub(tf.slice(tensor, beginHeight, sizeHeight), tf.slice(tensor, begin, sizeHeight));
