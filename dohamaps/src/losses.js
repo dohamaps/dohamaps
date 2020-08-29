@@ -44,7 +44,7 @@ export function combined(yTrue, yPred, labels, alpha = 0.05, beta = 1, gamma = 1
 
         var loss = tf.mul(tf.scalar(beta), lp(yTrue, yPred, lNum));
         loss = tf.add(loss, tf.mul(tf.scalar(gamma), gdl(yTrue, yPred)));
-        ones = [  ];
+        const ones = [  ];
         for (let i = 0; i < labels.length; ++i)
             ones.push(tf.ones([ batchSize, 1 ]));
         loss = tf.add(loss, tf.mul(tf.scalar(alpha), adversarial(ones, labels)));
