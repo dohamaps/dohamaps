@@ -102,10 +102,10 @@ class Discriminator extends tf.LayersModel
             for (let i = 0; i < inputs.length; ++i)
                 outputs.push(blocks[i].apply(inputs[i]));
 
-            return [ inputs, outputs, blocks ];
+            return [ outputs, blocks ];
         }
 
-        [ inputs, outputs, blocks ] = tf.tidy(tidy);
+        [ outputs, blocks ] = tf.tidy(tidy);
 
         const modelConfig =
         {
@@ -252,10 +252,10 @@ class Generator extends tf.LayersModel
 
             const outputs = preds;
 
-            return [ inputs, outputs, labels, blocks ];
+            return [ outputs, labels, blocks ];
         }
 
-        const [ inputs, outputs, labels, blocks ] = tf.tidy(tidy);
+        const [ outputs, labels, blocks ] = tf.tidy(tidy);
 
         const modelConfig =
         {
