@@ -23,7 +23,7 @@ export function gdl(yTrue, yPred, c = 2)
         const yPredDx = tf.abs(yPredD[1]);
 
         const gDiffY = tf.abs(tf.sub(yTrueDy, yPredDy));
-        const gDiffX = tf.abs(tf.sub(yTrueDx, yPredDx)));
+        const gDiffX = tf.abs(tf.sub(yTrueDx, yPredDx));
 
         const powX = tf.pow(gDiffX, c);
         const powY = tf.pow(gDiffY, c);
