@@ -6,6 +6,7 @@ import * as image from "./image";
 
 export function adversarial(yTrue, yPred)
 {
+    console.
     function tidy() { return tf.metrics.binaryCrossentropy(yTrue, yPred); }
     return tf.tidy("losses.adversarial", tidy);
 }
@@ -39,7 +40,7 @@ export function combined(yTrue, yPred, labels, alpha = 0.05, beta = 1, gamma = 1
 {
     function tidy()
     {
-        console.log(yPred);
+        console.log(labels);
         const batchSize = yPred.shape[0];
 
         var loss = tf.mul(tf.scalar(beta), lp(yTrue, yPred, lNum));
