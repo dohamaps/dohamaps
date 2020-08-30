@@ -37,11 +37,6 @@ export function lp(yTrue, yPred, lNum = 2)
 
 export function combined(yTrue, yPred, labels, alpha = 0.05, beta = 1, gamma = 1, lNum = 2)
 {
-    console.log(yTrue);
-    console.log("--------");
-    console.log(yPred);
-    console.log("--------");
-    console.log(labels);
     function tidy()
     {
         const batchSize = yPred.shape[0];
