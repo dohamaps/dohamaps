@@ -24,20 +24,20 @@ class Discriminator extends tf.LayersModel
         const clipLen = histLen + predLen;
         const depth = clipLen * channels;
 
+        const inputs =
+        [
+            tf.input({ shape: [ util.scale(height, 0, numScales),
+                       util.scale(width, 0, numScales), depth ] }),
+            tf.input({ shape: [ util.scale(height, 1, numScales),
+                       util.scale(width, 1, numScales), depth ] }),
+            tf.input({ shape: [ util.scale(height, 2, numScales),
+                       util.scale(width, 2, numScales), depth ] }),
+            tf.input({ shape: [ util.scale(height, 3, numScales),
+                       util.scale(width, 3, numScales), depth ] }),
+        ];
+
         function tidy()
         {
-            const inputs =
-            [
-                tf.input({ shape: [ util.scale(height, 0, numScales),
-                           util.scale(width, 0, numScales), depth ] }),
-                tf.input({ shape: [ util.scale(height, 1, numScales),
-                           util.scale(width, 1, numScales), depth ] }),
-                tf.input({ shape: [ util.scale(height, 2, numScales),
-                           util.scale(width, 2, numScales), depth ] }),
-                tf.input({ shape: [ util.scale(height, 3, numScales),
-                           util.scale(width, 3, numScales), depth ] }),
-            ];
-
             const scale0 =
             [
                 layers.input({ shape: inputs[0].shape }),
@@ -154,20 +154,20 @@ class Generator extends tf.LayersModel
         const concat = layers.concat(-1);
         const upSample = layers.upSampling2d({  });
 
+        const inputs =
+        [
+            tf.input({ shape: [ util.scale(height, 0, numScales),
+                       util.scale(width, 0, numScales), histDepth ] }),
+            tf.input({ shape: [ util.scale(height, 1, numScales),
+                       util.scale(width, 1, numScales), histDepth ] }),
+            tf.input({ shape: [ util.scale(height, 2, numScales),
+                       util.scale(width, 2, numScales), histDepth ] }),
+            tf.input({ shape: [ util.scale(height, 3, numScales),
+                       util.scale(width, 3, numScales), histDepth ] }),
+        ];
+
         function tidy()
         {
-            const inputs =
-            [
-                tf.input({ shape: [ util.scale(height, 0, numScales),
-                           util.scale(width, 0, numScales), histDepth ] }),
-                tf.input({ shape: [ util.scale(height, 1, numScales),
-                           util.scale(width, 1, numScales), histDepth ] }),
-                tf.input({ shape: [ util.scale(height, 2, numScales),
-                           util.scale(width, 2, numScales), histDepth ] }),
-                tf.input({ shape: [ util.scale(height, 3, numScales),
-                           util.scale(width, 3, numScales), histDepth ] }),
-            ];
-
             const layerInputs =
             [
                 tf.input({ shape: [ util.scale(height, 0, numScales),
