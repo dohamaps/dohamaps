@@ -24,6 +24,8 @@ class Discriminator extends tf.LayersModel
         const clipLen = histLen + predLen;
         const depth = clipLen * channels;
 
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
+
         const inputs =
         [
             tf.input({ shape: [ util.scale(height, 0, numScales),
@@ -35,6 +37,8 @@ class Discriminator extends tf.LayersModel
             tf.input({ shape: [ util.scale(height, 3, numScales),
                        util.scale(width, 3, numScales), depth ] }),
         ];
+
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
 
         const scale0 =
         [
@@ -87,6 +91,8 @@ class Discriminator extends tf.LayersModel
             layers.dense({ units: 1, activation: "sigmoid" }),
         ];
 
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
+
         const blocks =
         [
             scaleModel(scale0, "0"),
@@ -107,6 +113,8 @@ class Discriminator extends tf.LayersModel
             name: "Discriminator"
         };
         super(modelConfig);
+
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
 
         this.blocks = blocks;
         this.numScales = numScales;
@@ -325,15 +333,12 @@ class Combined
 
         this.isTraining = false;
 
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         console.log("  ℹ️   initializing discriminator...");
         this.discriminator = discriminator(args);
         console.log("  ℹ️   discriminator initialized");
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         console.log("  ℹ️   initializing generator...");
         this.generator = generator(args, this.discriminator);
         console.log("  ℹ️   generator initialized");
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
     }
     compile()
     {
