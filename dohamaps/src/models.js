@@ -24,8 +24,6 @@ class Discriminator extends tf.LayersModel
         const clipLen = histLen + predLen;
         const depth = clipLen * channels;
 
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
-
         const inputs =
         [
             tf.input({ shape: [ util.scale(height, 0, numScales),
@@ -37,8 +35,6 @@ class Discriminator extends tf.LayersModel
             tf.input({ shape: [ util.scale(height, 3, numScales),
                        util.scale(width, 3, numScales), depth ] }),
         ];
-
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
 
         const scale0 =
         [
@@ -101,10 +97,14 @@ class Discriminator extends tf.LayersModel
             scaleModel(scale3, "3"),
         ];
 
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
+
         const outputs = [  ];
 
         for (let i = 0; i < inputs.length; ++i)
             outputs.push(blocks[i].apply(inputs[i]));
+
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
 
         const modelConfig =
         {
@@ -112,6 +112,9 @@ class Discriminator extends tf.LayersModel
             outputs: outputs,
             name: "Discriminator"
         };
+
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
+
         super(modelConfig);
 
         console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
