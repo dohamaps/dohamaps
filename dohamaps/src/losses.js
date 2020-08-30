@@ -39,7 +39,6 @@ export function combined(yTrue, yPred, labels, alpha = 0.05, beta = 1, gamma = 1
 {
     function tidy()
     {
-        console.log(labels);
         const batchSize = yPred.shape[0];
 
         var loss = tf.mul(tf.scalar(beta), lp(yTrue, yPred, lNum));
