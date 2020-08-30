@@ -260,7 +260,6 @@ class Generator extends tf.LayersModel
     }
     call(inputs, kwargs)
     {
-        console.log("HERE");
         this.invokeCallHook(inputs, kwargs);
         let blocks = this.blocks;
         let numScales = this.numScales;
@@ -291,6 +290,7 @@ class Generator extends tf.LayersModel
             return [ preds, labels ];
         }
         const [ preds, labels ] = tf.tidy(tidy);
+        this.labels = labels;
         return preds;
     }
     static get className()
