@@ -132,8 +132,6 @@ class Discriminator extends tf.LayersModel
     }
     dispose()
     {
-        for (let block of this.blocks)
-            block.dispose();
         super.dispose();
     }
 };
@@ -306,8 +304,6 @@ class Generator extends tf.LayersModel
     }
     dispose()
     {
-        for (let block of this.blocks)
-            block.dispose();
         super.dispose();
     }
 };
