@@ -355,7 +355,7 @@ class Combined
     recompile(inputs)
     {
         this.generator.apply(inputs);
-        let labels = this.generator.labels;
+        let labels = tf.mean(tf.stack(this.generator.labels), -1);
         const genConfig =
         {
             optimizer: tf.train.adam(this.genLearnRate),
