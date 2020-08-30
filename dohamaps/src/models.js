@@ -356,6 +356,7 @@ class Combined
     {
         this.generator.apply(inputs);
         let labels = this.generator.labels;
+        console.log(labels);
         const genConfig =
         {
             optimizer: tf.train.adam(this.genLearnRate),

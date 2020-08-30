@@ -6,8 +6,6 @@ import * as image from "./image";
 
 export function adversarial(yTrue, yPred)
 {
-    console.log(yTrue.shape);
-    console.log(yPred.shape);
     function tidy() { return tf.metrics.binaryCrossentropy(yTrue, yPred); }
     return tf.tidy("losses.adversarial", tidy);
 }
