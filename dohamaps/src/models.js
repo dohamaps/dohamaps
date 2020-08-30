@@ -366,13 +366,17 @@ class Combined
     recompile(inputs)
     {
         this.generator.apply(inputs);
-        let labels = tf.mean(tf.stack(this.generator.labels), 0);
+        let labels = this.generator.labels;
+        function tidy()
+        {
+            return tf.mean(tf.stack(labels), 0);
+        }
         const genConfig =
         {
             optimizer: tf.train.adam(this.genLearnRate),
             loss: function (yTrue, yPred)
                   {
-                      return losses.combined(yTrue, yPred, labels);
+                      return losses.combined(yTrue, yPred, tf.tidy(tidy));
                   }
         };
         this.generator.compile(genConfig);
