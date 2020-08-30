@@ -17,13 +17,13 @@ export function gdl(yTrue, yPred, c = 2)
         const yTrueD = image.imageGradients(yTrue);
         const yPredD = image.imageGradients(yPred);
 
-        console.log(yTrueD[0].shape);
-        console.log(yTrueD[1].shape);
-        console.log(yPredD[0].shape);
-        console.log(yPredD[1].shape);
+        const yTrueDy = tf.abs(yTrueD[0]);
+        const yPredDy = tf.abs(yPredD[0]);
+        const yTrueDx = tf.abs(yTrueD[1]);
+        const yPredDx = tf.abs(yPredD[1]);
 
-        const gDiffY = tf.abs(tf.sub(tf.abs(yTrueD[0]), tf.abs(yPredD[0])));
-        const gDiffX = tf.abs(tf.sub(tf.abs(yTrueD[1]), tf.abs(yPredD[1])));
+        const gDiffY = tf.abs(tf.sub(yTrueDy, yPredDy));
+        const gDiffX = tf.abs(tf.sub(yTrueDx, yPredDx)));
 
         const powX = tf.pow(gDiffX, c);
         const powY = tf.pow(gDiffY, c);
