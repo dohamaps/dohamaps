@@ -352,8 +352,9 @@ class Combined
         ];
         console.log("  ℹ️   model compiled");
     }
-    recompile()
+    recompile(inputs)
     {
+        this.generator.apply(inputs);
         let labels = this.generator.labels;
         const genConfig =
         {
@@ -400,7 +401,7 @@ class Combined
         /*** generator ***/
 
         console.log("  ℹ️   training generator...");
-        this.recompile();
+        this.recompile(histScales);
         const genLoss = await this.generator.trainOnBatch(histScales, gtScales);
 
         /*** output ***/
