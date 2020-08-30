@@ -35,7 +35,11 @@ export function gdl(yTrue, yPred, c = 2)
 
 export function lp(yTrue, yPred, lNum = 2)
 {
-    function tidy() { return tf.pow(tf.sum(tf.abs(tf.sub(yPred, yTrue)), tf.scalar(lNum))); }
+    function tidy() 
+    {
+        const sum = tf.sum(tf.abs(tf.sub(yPred, yTrue)));
+        return tf.pow(sum, lNum);
+    }
     return tf.tidy("losses.lp", tidy);
 }
 
