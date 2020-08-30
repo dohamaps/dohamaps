@@ -371,13 +371,14 @@ class Combined
         {
             return tf.mean(tf.stack(labels), 0);
         }
+        function loss(yTrue, yPred)
+        {
+            return losses.combined(yTrue, yPred, tf.tidy(tidy));
+        }
         const genConfig =
         {
             optimizer: tf.train.adam(this.genLearnRate),
-            loss: function (yTrue, yPred)
-                  {
-                      return losses.combined(yTrue, yPred, tf.tidy(tidy));
-                  }
+            loss: loss
         };
         this.generator.compile(genConfig);
     }
@@ -444,9 +445,30 @@ class Combined
         if (this.isTraining)
             throw new Error("model is already training");
         this.isTraining = true;
-        for (let epoch = 0; epoch < epochs; ++epoch)
+        try
         {
-
+            for (let epoch = 0; epoch < epochs; ++epoch)
+            {
+                let dataIterator = await dataset.backend.iterator();
+                let stepsDone = 0;
+                while (true)
+                {
+                    const iteratorOut = dataIterator.next();
+                    if (iteratorOut.value != null)
+                    {
+                        const data = iteratorOut.value;
+                        const out = this.trainStep(data);
+                        tf.dispose(data);
+                        stepsDone++;
+                    }
+                    if (iteratorOut.done)
+                        break;
+                }
+            }
+        }
+        finally
+        {
+            this.isTraining = false;
         }
     }
     dispose()

@@ -19,7 +19,7 @@ export async function tensorToImage(tensor, channels = 3)
     async function tensorToArrayBuffer(frame)
     {
         try { return util.toArrayBuffer(Buffer.from(await frame.data())); }
-        catch (error) { console.log(error); }
+        catch (error) { console.error(error); }
     }
     try
     {
@@ -33,7 +33,7 @@ export async function tensorToImage(tensor, channels = 3)
         const delays = Array(frames.length).fill(0);
         return util.toBuffer(UPNG.encode(frames, width, height, 0, delays));
     }
-    catch (error) { console.log(error); }
+    catch (error) { console.error(error); }
 }
 
 export function crop(image, top, left, dimensions)

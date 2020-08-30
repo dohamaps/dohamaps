@@ -2,66 +2,85 @@
 import * as tf from "@tensorflow/tfjs-node";
 import * as osPath from "path";
 
-import * as util from "./util";
-import * as image from "./image";
-import * as io from "./io"
-import * as data from "./data";
-import * as layers from "./layers";
-import * as models from "./models";
-import * as metrics from "./metrics";
-import * as losses from "./losses";
-import * as memory from "./memory";
+export import * as util from "./util";
+export import * as image from "./image";
+export import * as io from "./io"
+export import * as data from "./data";
+export import * as layers from "./layers";
+export import * as models from "./models";
+export import * as metrics from "./metrics";
+export import * as losses from "./losses";
+export import * as memory from "./memory";
 
 export async function processClips(numClips, clipLen, loadPath, savePath, dimensions)
 {
     async function getClip(path, startIndex = null)
     {
-        var imgPaths = (await util.glob(path, "*")).sort();
-        var clip = null;
-        if (startIndex)
-            imgPaths = imgPaths.slice(startIndex, startIndex + clipLen);
-        else
+        try
         {
-            startIndex = util.random(0, imgPaths.length - clipLen);
-            imgPaths = imgPaths.slice(startIndex, startIndex + clipLen);
-        }
-        for (let imgPath of imgPaths)
-        {
-            const buffer = await io.loadFile(imgPath);
-            if (clip)
-                clip = tf.tidy(function() { return clip.concat(image.imageToTensor(buffer), -1); });
+            var imgPaths = (await util.glob(path, "*")).sort();
+            var clip = null;
+            if (startIndex)
+                imgPaths = imgPaths.slice(startIndex, startIndex + clipLen);
             else
-                clip = image.imageToTensor(buffer);
+            {
+                startIndex = util.random(0, imgPaths.length - clipLen);
+                imgPaths = imgPaths.slice(startIndex, startIndex + clipLen);
+            }
+            for (let imgPath of imgPaths)
+            {
+                const buffer = await io.loadFile(imgPath);
+                if (clip)
+                    clip = tf.tidy(function() { return clip.concat(image.imageToTensor(buffer), -1); });
+                else
+                    clip = image.imageToTensor(buffer);
+            }
+            return clip;
         }
-        return clip;
+        catch (error) { console.error(error); }
     }
-
-    const savePredPath = osPath.join(savePath, "pred");
-    const startIndex = (await util.glob(loadPath, "*")).length - clipLen;
-    var clipTensor = await getClip(loadPath, startIndex);
-    await io.saveFile(savePredPath, "pred.tns", await util.tensorToTns(clipTensor));
-
-    tf.dispose(clipTensor);
-
-    const numExisting = (await util.glob(savePath, "*.tns")).length;
-    for (let i = numExisting; i < numExisting + numClips; ++i)
+    try
     {
-        clipTensor = image.cropRandom(await getClip(loadPath), dimensions);
-        await io.saveFile(savePath, i + ".tns", await util.tensorToTns(clipTensor));
+        const savePredPath = osPath.join(savePath, "pred");
+        const startIndex = (await util.glob(loadPath, "*")).length - clipLen;
+        var clipTensor = await getClip(loadPath, startIndex);
+        await io.saveFile(savePredPath, "pred.tns", await util.tensorToTns(clipTensor));
 
         tf.dispose(clipTensor);
+
+        const numExisting = (await util.glob(savePath, "*.tns")).length;
+        for (let i = numExisting; i < numExisting + numClips; ++i)
+        {
+            clipTensor = image.cropRandom(await getClip(loadPath), dimensions);
+            await io.saveFile(savePath, i + ".tns", await util.tensorToTns(clipTensor));
+
+            tf.dispose(clipTensor);
+        }
     }
+    catch (error) { console.error(error); }
 }
 
-export
+export async function train(args)
 {
-    util,
-    image,
-    io,
-    data,
-    layers,
-    models,
-    metrics,
-    losses,
-    memory
-};
+    const config =
+    {
+        histLen: args.histLen,
+        predLen: args.predLen,
+        numScales: args.numScales ? args.numScales : 4,
+        dimensions: args.trainDimensions,
+        channels: args.channels ? args.channels : 3,
+        discLearnRate: args.discLearnRate,
+        genLearnRate: args.genLearnRate,
+    }
+    const dataset = data.dataset(config);
+    const clipsPath = osPath.join(__dirname, "../../clips");
+    await dataset.globFiles(clipsPath, "*.tns");
+    await dataset.loadTensors();
+    dataset.batch(args.batchSize);
+    dataset.splitTensorsTrain();
+    dataset.scale();
+    const gan = models.combined(config);
+    gan.compile();
+    await gan.fit(dataset, args.epochs);
+    gan.dispose();
+}

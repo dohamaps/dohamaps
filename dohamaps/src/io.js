@@ -20,7 +20,7 @@ async function exists(path)
 export async function loadFile(path)
 {
     try { return await fsAsync.readFile(path); }
-    catch (error) { console.log(error); }
+    catch (error) { console.error(error); }
 }
 
 export async function saveFile(path, name, buffer)
@@ -31,5 +31,5 @@ export async function saveFile(path, name, buffer)
             await fsAsync.mkdir(path, { recursive: true, mode: 0o777 });
         return await fsAsync.writeFile(osPath.join(path, name), buffer);
     }
-    catch (error) { console.log(error); }
+    catch (error) { console.error(error); }
 }

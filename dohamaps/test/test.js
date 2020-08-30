@@ -19,7 +19,7 @@ class Tester
             const savePath = osPath.join(__dirname, "../../clips");
             dohamaps.processClips(10, 4, loadPath, savePath, [ 64, 64 ]);
         }
-        catch (error) { console.log(error); }
+        catch (error) { console.error(error); }
     }
     async dataset()
     {
@@ -44,7 +44,7 @@ class Tester
             for (let each of array)
                 console.log(each);
         }
-        catch (error) { console.log(error); }
+        catch (error) { console.error(error); }
     }
     async combined()
     {
@@ -69,12 +69,10 @@ class Tester
             dataset.scale();
             const gan = dohamaps.models.combined(config);
             gan.compile();
-            const iterator = await dataset.backend.iterator();
-            const iterOut = await iterator.next();
-            await gan.trainStep(iterOut.value);
+            await gan.fit(dataset, 5);
             gan.dispose();
         }
-        catch (error) { console.log(error); }
+        catch (error) { console.error(error); }
     }
     static profile(info)
     {
@@ -92,7 +90,7 @@ async function test()
         // await tester.dataset();
         await tester.combined();
     }
-    catch (error) { console.log(error); }
+    catch (error) { console.error(error); }
 }
 
 tf.profile(test).then(Tester.profile);

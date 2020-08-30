@@ -35,7 +35,7 @@ class Dataset
         async function map(path)
         {
             try { return util.tnsToTensor(await io.loadFile(path)); }
-            catch (error) { console.log(error); }
+            catch (error) { console.error(error); }
         }
         this.backend = this.backend.mapAsync(map);
     }
