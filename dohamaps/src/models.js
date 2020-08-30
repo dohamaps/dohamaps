@@ -327,11 +327,11 @@ class Combined
 
         console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         console.log("  ℹ️   initializing discriminator...");
-        this.discriminator = tf.tidy(() => discriminator(args));
+        this.discriminator = discriminator(args);
         console.log("  ℹ️   discriminator initialized");
         console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         console.log("  ℹ️   initializing generator...");
-        this.generator = tf.tidy(() => generator(args, this.discriminator));
+        this.generator = generator(args, this.discriminator);
         console.log("  ℹ️   generator initialized");
         console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
     }
