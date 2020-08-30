@@ -291,7 +291,6 @@ class Generator extends tf.LayersModel
         }
         const [ preds, labels ] = tf.tidy(tidy);
         this.labels = labels;
-        console.log(this.labels);
         return preds;
     }
     static get className()
