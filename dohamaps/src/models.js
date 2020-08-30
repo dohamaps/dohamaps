@@ -334,14 +334,12 @@ class Combined
 
         this.isTraining = false;
 
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         console.log("  ℹ️   initializing discriminator...");
         this.discriminator = discriminator(args);
         console.log("  ℹ️   discriminator initialized");
         console.log("  ℹ️   initializing generator...");
         this.generator = generator(args, this.discriminator);
         console.log("  ℹ️   generator initialized");
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
     }
     compile()
     {
@@ -447,10 +445,8 @@ class Combined
     }
     dispose()
     {
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         this.discriminator.dispose();
         this.generator.dispose();
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
     }
 };
 
