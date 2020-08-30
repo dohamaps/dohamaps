@@ -68,12 +68,9 @@ class Tester
             dataset.splitTensorsTrain();
             dataset.scale();
             const gan = dohamaps.models.combined(config);
-            console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
             gan.compile();
-            console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
             const iterator = await dataset.backend.iterator();
             const iterOut = await iterator.next();
-            console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
             await gan.trainStep(iterOut.value);
             gan.dispose();
         }

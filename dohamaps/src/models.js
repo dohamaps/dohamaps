@@ -420,7 +420,9 @@ class Combined
         /*** generator ***/
 
         console.log("  ℹ️   training generator...");
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         this.recompile(histScales);
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         const genLoss = await this.generator.trainOnBatch(histScales, gtScales);
 
         /*** output ***/
