@@ -100,8 +100,6 @@ class Discriminator extends tf.LayersModel
         for (let i = 0; i < inputs.length; ++i)
             outputs.push(blocks[i].apply(inputs[i]));
 
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
-
         const modelConfig =
         {
             inputs: inputs,
@@ -109,11 +107,7 @@ class Discriminator extends tf.LayersModel
             name: "Discriminator"
         };
 
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
-
         super(modelConfig);
-
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
 
         this.blocks = blocks;
         this.numScales = numScales;
@@ -135,6 +129,13 @@ class Discriminator extends tf.LayersModel
     static get className()
     {
         return "Discriminator";
+    }
+    dispose()
+    {
+        for (let block of this.blocks)
+        {
+            tf.dispose(block);
+        }
     }
 };
 
@@ -304,6 +305,13 @@ class Generator extends tf.LayersModel
     {
         return "Generator";
     }
+    dispose()
+    {
+        for (let block of this.blocks)
+        {
+            tf.dispose(block);
+        }
+    }
 };
 
 export function discriminator(args)
@@ -440,6 +448,11 @@ class Combined
         {
 
         }
+    }
+    dispose()
+    {
+        this.discriminator.dispose();
+        this.generator.dispose();
     }
 };
 

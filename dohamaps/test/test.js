@@ -72,6 +72,7 @@ class Tester
             const iterator = await dataset.backend.iterator();
             const iterOut = await iterator.next();
             await gan.trainStep(iterOut.value);
+            gan.dispose();
         }
         catch (error) { console.log(error); }
     }
