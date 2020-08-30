@@ -447,8 +447,10 @@ class Combined
     }
     dispose()
     {
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         this.discriminator.dispose();
         this.generator.dispose();
+        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
     }
 };
 
