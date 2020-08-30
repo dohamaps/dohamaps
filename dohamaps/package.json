@@ -4,8 +4,8 @@
     "description": "",
     "main": "src/index.js",
     "scripts": {
-        "test-nodemon": "nodemon --exec babel-node --trace-warnings test/test.js"
-        "test-node": "babel-node --trace-warnings test/test.js"
+        "test:nodemon": "nodemon --exec babel-node --trace-warnings test/test.js"
+        "test:node": "babel-node --trace-warnings test/test.js"
     },
     "author": "dohamaps",
     "license": "MIT",
