@@ -87,17 +87,18 @@ class Discriminator extends tf.LayersModel
             layers.dense({ units: 1, activation: "sigmoid" }),
         ];
 
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
-
-        const blocks =
-        [
-            scaleModel(scale0, "0"),
-            scaleModel(scale1, "1"),
-            scaleModel(scale2, "2"),
-            scaleModel(scale3, "3"),
-        ];
-
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
+        function tidy()
+        {
+            const blocks =
+            [
+                scaleModel(scale0, "0"),
+                scaleModel(scale1, "1"),
+                scaleModel(scale2, "2"),
+                scaleModel(scale3, "3"),
+            ];
+            return blocks;
+        }
+        const blocks = tf.tidy(tidy);
 
         const outputs = [  ];
 
