@@ -420,9 +420,7 @@ class Combined
         /*** generator ***/
 
         console.log("  ℹ️   training generator...");
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         this.recompile(histScales);
-        console.log("  ℹ️   " + tf.memory().numTensors + " tensors");
         const genLoss = await this.generator.trainOnBatch(histScales, gtScales);
 
         /*** output ***/
@@ -432,6 +430,8 @@ class Combined
             { name: "Discriminator loss", value: discLoss },
             { name: "Generator loss", value: genLoss },
         ];
+
+        tf.dispose([ discInput, discLabels, histScales, gtScales ]);
 
         return out;
     }
