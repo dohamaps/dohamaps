@@ -24,81 +24,88 @@ class Discriminator extends tf.LayersModel
         const clipLen = histLen + predLen;
         const depth = clipLen * channels;
 
-        const inputs =
-        [
-            tf.input({ shape: [ util.scale(height, 0, numScales),
-                       util.scale(width, 0, numScales), depth ] }),
-            tf.input({ shape: [ util.scale(height, 1, numScales),
-                       util.scale(width, 1, numScales), depth ] }),
-            tf.input({ shape: [ util.scale(height, 2, numScales),
-                       util.scale(width, 2, numScales), depth ] }),
-            tf.input({ shape: [ util.scale(height, 3, numScales),
-                       util.scale(width, 3, numScales), depth ] }),
-        ];
+        function tidy()
+        {
+            const inputs =
+            [
+                tf.input({ shape: [ util.scale(height, 0, numScales),
+                           util.scale(width, 0, numScales), depth ] }),
+                tf.input({ shape: [ util.scale(height, 1, numScales),
+                           util.scale(width, 1, numScales), depth ] }),
+                tf.input({ shape: [ util.scale(height, 2, numScales),
+                           util.scale(width, 2, numScales), depth ] }),
+                tf.input({ shape: [ util.scale(height, 3, numScales),
+                           util.scale(width, 3, numScales), depth ] }),
+            ];
 
-        const scale0 =
-        [
-            layers.input({ shape: inputs[0].shape }),
-            layers.conv2d({ filters: 64, kernelSize: 3, padding: "valid" }),
-            layers.maxPooling2d({  }),
-            layers.flatten({  }),
-            layers.dense({ units: 512 }),
-            layers.dense({ units: 256 }),
-            layers.dense({ units: 1, activation: "sigmoid" }),
-        ];
+            const scale0 =
+            [
+                layers.input({ shape: inputs[0].shape }),
+                layers.conv2d({ filters: 64, kernelSize: 3, padding: "valid" }),
+                layers.maxPooling2d({  }),
+                layers.flatten({  }),
+                layers.dense({ units: 512 }),
+                layers.dense({ units: 256 }),
+                layers.dense({ units: 1, activation: "sigmoid" }),
+            ];
 
-        const scale1 =
-        [
-            layers.input({ shape: inputs[1].shape }),
-            layers.conv2d({ filters: 64, kernelSize: 3, padding: "valid" }),
-            layers.conv2d({ filters: 128, kernelSize: 3, padding: "valid" }),
-            layers.conv2d({ filters: 128, kernelSize: 3, padding: "valid" }),
-            layers.maxPooling2d({  }),
-            layers.flatten({  }),
-            layers.dense({ units: 1024 }),
-            layers.dense({ units: 512 }),
-            layers.dense({ units: 1, activation: "sigmoid" }),
-        ];
+            const scale1 =
+            [
+                layers.input({ shape: inputs[1].shape }),
+                layers.conv2d({ filters: 64, kernelSize: 3, padding: "valid" }),
+                layers.conv2d({ filters: 128, kernelSize: 3, padding: "valid" }),
+                layers.conv2d({ filters: 128, kernelSize: 3, padding: "valid" }),
+                layers.maxPooling2d({  }),
+                layers.flatten({  }),
+                layers.dense({ units: 1024 }),
+                layers.dense({ units: 512 }),
+                layers.dense({ units: 1, activation: "sigmoid" }),
+            ];
 
-        const scale2 =
-        [
-            layers.input({ shape: inputs[2].shape }),
-            layers.conv2d({ filters: 128, kernelSize: 5, padding: "valid" }),
-            layers.conv2d({ filters: 256, kernelSize: 5, padding: "valid" }),
-            layers.conv2d({ filters: 256, kernelSize: 5, padding: "valid" }),
-            layers.maxPooling2d({  }),
-            layers.flatten({  }),
-            layers.dense({ units: 1024 }),
-            layers.dense({ units: 512 }),
-            layers.dense({ units: 1, activation: "sigmoid" }),
-        ];
+            const scale2 =
+            [
+                layers.input({ shape: inputs[2].shape }),
+                layers.conv2d({ filters: 128, kernelSize: 5, padding: "valid" }),
+                layers.conv2d({ filters: 256, kernelSize: 5, padding: "valid" }),
+                layers.conv2d({ filters: 256, kernelSize: 5, padding: "valid" }),
+                layers.maxPooling2d({  }),
+                layers.flatten({  }),
+                layers.dense({ units: 1024 }),
+                layers.dense({ units: 512 }),
+                layers.dense({ units: 1, activation: "sigmoid" }),
+            ];
 
-        const scale3 =
-        [
-            layers.input({ shape: inputs[3].shape }),
-            layers.conv2d({ filters: 128, kernelSize: 7, padding: "valid" }),
-            layers.conv2d({ filters: 256, kernelSize: 7, padding: "valid" }),
-            layers.conv2d({ filters: 512, kernelSize: 5, padding: "valid" }),
-            layers.conv2d({ filters: 128, kernelSize: 5, padding: "valid" }),
-            layers.maxPooling2d({  }),
-            layers.flatten({  }),
-            layers.dense({ units: 1024 }),
-            layers.dense({ units: 512 }),
-            layers.dense({ units: 1, activation: "sigmoid" }),
-        ];
+            const scale3 =
+            [
+                layers.input({ shape: inputs[3].shape }),
+                layers.conv2d({ filters: 128, kernelSize: 7, padding: "valid" }),
+                layers.conv2d({ filters: 256, kernelSize: 7, padding: "valid" }),
+                layers.conv2d({ filters: 512, kernelSize: 5, padding: "valid" }),
+                layers.conv2d({ filters: 128, kernelSize: 5, padding: "valid" }),
+                layers.maxPooling2d({  }),
+                layers.flatten({  }),
+                layers.dense({ units: 1024 }),
+                layers.dense({ units: 512 }),
+                layers.dense({ units: 1, activation: "sigmoid" }),
+            ];
 
-        const blocks =
-        [
-            scaleModel(scale0, "0"),
-            scaleModel(scale1, "1"),
-            scaleModel(scale2, "2"),
-            scaleModel(scale3, "3"),
-        ];
+            const blocks =
+            [
+                scaleModel(scale0, "0"),
+                scaleModel(scale1, "1"),
+                scaleModel(scale2, "2"),
+                scaleModel(scale3, "3"),
+            ];
 
-        const outputs = [  ];
+            const outputs = [  ];
 
-        for (let i = 0; i < inputs.length; ++i)
-            outputs.push(blocks[i].apply(inputs[i]));
+            for (let i = 0; i < inputs.length; ++i)
+                outputs.push(blocks[i].apply(inputs[i]));
+
+            return [ inputs, outputs, blocks ];
+        }
+
+        [ inputs, outputs, blocks ] = tf.tidy(tidy);
 
         const modelConfig =
         {
@@ -144,104 +151,111 @@ class Generator extends tf.LayersModel
         const histDepth = histLen * channels;
         const predDepth = predLen * channels;
 
-        const inputs =
-        [
-            tf.input({ shape: [ util.scale(height, 0, numScales),
-                       util.scale(width, 0, numScales), histDepth ] }),
-            tf.input({ shape: [ util.scale(height, 1, numScales),
-                       util.scale(width, 1, numScales), histDepth ] }),
-            tf.input({ shape: [ util.scale(height, 2, numScales),
-                       util.scale(width, 2, numScales), histDepth ] }),
-            tf.input({ shape: [ util.scale(height, 3, numScales),
-                       util.scale(width, 3, numScales), histDepth ] }),
-        ];
-
-        const layerInputs =
-        [
-            tf.input({ shape: [ util.scale(height, 0, numScales),
-                       util.scale(width, 0, numScales), histDepth ] }),
-            tf.input({ shape: [ util.scale(height, 1, numScales),
-                       util.scale(width, 1, numScales), histDepth + predDepth ] }),
-            tf.input({ shape: [ util.scale(height, 2, numScales),
-                       util.scale(width, 2, numScales), histDepth + predDepth ] }),
-            tf.input({ shape: [ util.scale(height, 3, numScales),
-                       util.scale(width, 3, numScales), histDepth + predDepth ] }),
-        ];
-
-        const scale0 =
-        [
-            layers.input({ shape: layerInputs[0].shape }),
-            layers.conv2d({ filters: 128, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: 128, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: channels * predLen, kernelSize: 3,
-                            padding: "same", activation: "tanh" }),
-        ];
-
-        const scale1 =
-        [
-            layers.input({ shape: layerInputs[1].shape }),
-            layers.conv2d({ filters: 128, kernelSize: 5, padding: "same" }),
-            layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: 128, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: channels * predLen, kernelSize: 5,
-                            padding: "same", activation: "tanh" }),
-        ];
-
-        const scale2 =
-        [
-            layers.input({ shape: layerInputs[2].shape }),
-            layers.conv2d({ filters: 128, kernelSize: 5, padding: "same" }),
-            layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: 512, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: 128, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: channels * predLen, kernelSize: 5,
-                            padding: "same", activation: "tanh" }),
-        ];
-
-        const scale3 =
-        [
-            layers.input({ shape: layerInputs[3].shape }),
-            layers.conv2d({ filters: 128, kernelSize: 7, padding: "same" }),
-            layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: 512, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: 128, kernelSize: 3, padding: "same" }),
-            layers.conv2d({ filters: channels * predLen, kernelSize: 7,
-                            padding: "same", activation: "tanh" }),
-        ];
-
-        const blocks =
-        [
-            scaleModel(scale0, "0"),
-            scaleModel(scale1, "1"),
-            scaleModel(scale2, "2"),
-            scaleModel(scale3, "3"),
-        ];
-
         const concat = layers.concat(-1);
         const upSample = layers.upSampling2d({  });
 
-        const preds = [  ];
-
-        for (let i = 0; i < inputs.length; ++i)
+        function tidy()
         {
-            if (i > 0)
+            const inputs =
+            [
+                tf.input({ shape: [ util.scale(height, 0, numScales),
+                           util.scale(width, 0, numScales), histDepth ] }),
+                tf.input({ shape: [ util.scale(height, 1, numScales),
+                           util.scale(width, 1, numScales), histDepth ] }),
+                tf.input({ shape: [ util.scale(height, 2, numScales),
+                           util.scale(width, 2, numScales), histDepth ] }),
+                tf.input({ shape: [ util.scale(height, 3, numScales),
+                           util.scale(width, 3, numScales), histDepth ] }),
+            ];
+
+            const layerInputs =
+            [
+                tf.input({ shape: [ util.scale(height, 0, numScales),
+                           util.scale(width, 0, numScales), histDepth ] }),
+                tf.input({ shape: [ util.scale(height, 1, numScales),
+                           util.scale(width, 1, numScales), histDepth + predDepth ] }),
+                tf.input({ shape: [ util.scale(height, 2, numScales),
+                           util.scale(width, 2, numScales), histDepth + predDepth ] }),
+                tf.input({ shape: [ util.scale(height, 3, numScales),
+                           util.scale(width, 3, numScales), histDepth + predDepth ] }),
+            ];
+
+            const scale0 =
+            [
+                layers.input({ shape: layerInputs[0].shape }),
+                layers.conv2d({ filters: 128, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: 128, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: channels * predLen, kernelSize: 3,
+                                padding: "same", activation: "tanh" }),
+            ];
+
+            const scale1 =
+            [
+                layers.input({ shape: layerInputs[1].shape }),
+                layers.conv2d({ filters: 128, kernelSize: 5, padding: "same" }),
+                layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: 128, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: channels * predLen, kernelSize: 5,
+                                padding: "same", activation: "tanh" }),
+            ];
+
+            const scale2 =
+            [
+                layers.input({ shape: layerInputs[2].shape }),
+                layers.conv2d({ filters: 128, kernelSize: 5, padding: "same" }),
+                layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: 512, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: 128, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: channels * predLen, kernelSize: 5,
+                                padding: "same", activation: "tanh" }),
+            ];
+
+            const scale3 =
+            [
+                layers.input({ shape: layerInputs[3].shape }),
+                layers.conv2d({ filters: 128, kernelSize: 7, padding: "same" }),
+                layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: 512, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: 256, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: 128, kernelSize: 3, padding: "same" }),
+                layers.conv2d({ filters: channels * predLen, kernelSize: 7,
+                                padding: "same", activation: "tanh" }),
+            ];
+
+            const blocks =
+            [
+                scaleModel(scale0, "0"),
+                scaleModel(scale1, "1"),
+                scaleModel(scale2, "2"),
+                scaleModel(scale3, "3"),
+            ];
+
+            const preds = [  ];
+
+            for (let i = 0; i < inputs.length; ++i)
             {
-                const upSampled = upSample.apply(preds[i - 1]);
-                preds.push(blocks[i].apply(concat.apply([ inputs[i], upSampled ])));
+                if (i > 0)
+                {
+                    const upSampled = upSample.apply(preds[i - 1]);
+                    preds.push(blocks[i].apply(concat.apply([ inputs[i], upSampled ])));
+                }
+                else
+                    preds.push(blocks[i].apply(inputs[i]));
             }
-            else
-                preds.push(blocks[i].apply(inputs[i]));
+
+            const discInput = [  ]
+            for (let i = 0; i < inputs.length; ++i)
+                discInput.push(concat.apply([ inputs[i], preds[i] ]));
+            const labels = discriminator.apply(discInput);
+
+            const outputs = preds;
+
+            return [ inputs, outputs, labels, blocks ];
         }
 
-        const discInput = [  ]
-        for (let i = 0; i < inputs.length; ++i)
-            discInput.push(concat.apply([ inputs[i], preds[i] ]));
-        const labels = discriminator.apply(discInput);
-
-        const outputs = preds;
+        const [ inputs, outputs, labels, blocks ] = tf.tidy(tidy);
 
         const modelConfig =
         {
@@ -256,7 +270,7 @@ class Generator extends tf.LayersModel
         this.discriminator = discriminator;
         this.upSample = upSample;
         this.concat = concat;
-        // this.labels = labels;
+        this.labels = labels;
     }
     call(inputs, kwargs)
     {
@@ -323,6 +337,8 @@ class Combined
         this.discLearnRate = args.discLearnRate;
         this.genLearnRate = args.genLearnRate;
 
+        this.isTraining = false;
+
         console.log("  ℹ️   initializing discriminator...");
         this.discriminator = discriminator(args);
         console.log("  ℹ️   discriminator initialized");
@@ -368,30 +384,36 @@ class Combined
     }
     async trainStep(data)
     {
-        console.log("  ℹ️   beginning training step...");
-        const histScales = data[0];
-        const gtScales = data[1];
-
-        const fgScales = this.generator.predictOnBatch(histScales);
-
-        const batchSize = fgScales[0].shape[0];
-
-        const discInput = [  ];
-        for (let i = 0; i < this.numScales; ++i)
+        function tidy()
         {
-            var fakeSequence = tf.concat([ histScales[i], fgScales[i] ], -1);
-            var realSequence = tf.concat([ histScales[i], gtScales[i] ], -1);
-            discInput.push(tf.concat([ fakeSequence, realSequence ], 0));
+            console.log("  ℹ️   beginning training step...");
+            const histScales = data[0];
+            const gtScales = data[1];
+
+            const fgScales = this.generator.predictOnBatch(histScales);
+
+            const batchSize = fgScales[0].shape[0];
+
+            const discInput = [  ];
+            for (let i = 0; i < this.numScales; ++i)
+            {
+                var fakeSequence = tf.concat([ histScales[i], fgScales[i] ], -1);
+                var realSequence = tf.concat([ histScales[i], gtScales[i] ], -1);
+                discInput.push(tf.concat([ fakeSequence, realSequence ], 0));
+            }
+
+            const labelShape = [ batchSize, 1 ];
+            var discLabel = tf.concat([ tf.zeros(labelShape), tf.ones(labelShape) ], 0);
+            const noise = tf.mul(tf.scalar(0.05), tf.randomUniform(discLabel.shape));
+            discLabel = tf.add(discLabel, noise);
+
+            const discLabels = [  ];
+            for (let i = 0; i < this.numScales; ++i)
+                discLabels.push(discLabel);
+            return [ discInput, discLabels, histScales, gtScales ];
         }
 
-        const labelShape = [ batchSize, 1 ];
-        var discLabel = tf.concat([ tf.zeros(labelShape), tf.ones(labelShape) ], 0);
-        const noise = tf.mul(tf.scalar(0.05), tf.randomUniform(discLabel.shape));
-        discLabel = tf.add(discLabel, noise);
-
-        const discLabels = [  ];
-        for (let i = 0; i < this.numScales; ++i)
-            discLabels.push(discLabel);
+        const [ discInput, discLabels, histScales, gtScales ] = tf.tidy(tidy);
 
         /*** discriminator ***/
 
@@ -413,6 +435,16 @@ class Combined
         ];
 
         return out;
+    }
+    async fit(dataset, epochs)
+    {
+        if (this.isTraining)
+            throw new Error("model is already training");
+        this.isTraining = true;
+        for (let epoch = 0; epoch < epochs; ++epoch)
+        {
+
+        }
     }
 };
 
