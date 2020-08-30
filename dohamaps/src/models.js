@@ -370,18 +370,20 @@ class Combined
     }
     async trainStep(data)
     {
+        let generator = this.generator;
+        let numScales = this.numScales;
         function tidy()
         {
             console.log("  ℹ️   beginning training step...");
             const histScales = data[0];
             const gtScales = data[1];
 
-            const fgScales = this.generator.predictOnBatch(histScales);
+            const fgScales = generator.predictOnBatch(histScales);
 
             const batchSize = fgScales[0].shape[0];
 
             const discInput = [  ];
-            for (let i = 0; i < this.numScales; ++i)
+            for (let i = 0; i < numScales; ++i)
             {
                 var fakeSequence = tf.concat([ histScales[i], fgScales[i] ], -1);
                 var realSequence = tf.concat([ histScales[i], gtScales[i] ], -1);
@@ -394,7 +396,7 @@ class Combined
             discLabel = tf.add(discLabel, noise);
 
             const discLabels = [  ];
-            for (let i = 0; i < this.numScales; ++i)
+            for (let i = 0; i < numScales; ++i)
                 discLabels.push(discLabel);
             return [ discInput, discLabels, histScales, gtScales ];
         }
