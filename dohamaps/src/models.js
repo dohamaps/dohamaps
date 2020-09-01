@@ -474,6 +474,7 @@ class Combined
                     if (iteratorOut.value != null)
                     {
                         const data = iteratorOut.value;
+                        console.log("  ℹ️   iteratorOut.value " + data);
                         const out = await this.trainStep(data);
                         tf.dispose(data);
                     }
