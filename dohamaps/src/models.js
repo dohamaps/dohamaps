@@ -458,6 +458,7 @@ class Combined
     }
     async fit(dataset, epochs)
     {
+        console.log("  ℹ️   beginning fitting...");
         if (this.isTraining)
             throw new Error("model is already training");
         this.isTraining = true;
@@ -465,6 +466,7 @@ class Combined
         {
             for (let epoch = 0; epoch < epochs; ++epoch)
             {
+                console.log("  ℹ️   epoch " + epoch);
                 let dataIterator = await dataset.backend.iterator();
                 while (true)
                 {
@@ -472,7 +474,7 @@ class Combined
                     if (iteratorOut.value != null)
                     {
                         const data = iteratorOut.value;
-                        const out = this.trainStep(data);
+                        const out = await this.trainStep(data);
                         tf.dispose(data);
                     }
                     if (iteratorOut.done)
