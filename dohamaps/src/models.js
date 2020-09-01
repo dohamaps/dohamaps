@@ -333,6 +333,8 @@ class Combined
         this.genLearnRate = args.genLearnRate;
 
         this.isTraining = false;
+        this.isTesting = false;
+        this.isPredicting = false;
 
         console.log("  ℹ️   initializing discriminator...");
         this.discriminator = discriminator(args);
@@ -440,6 +442,20 @@ class Combined
 
         return out;
     }
+    async testStep(data)
+    {
+        const histScales = data[0];
+        const gtScales = data[1];
+        console.log("  ℹ️   testing generator...");
+        this.recompile(histScales);
+        const genLoss = await this.generator.trainOnBatch(histScales, gtScales);
+        return [ { name: "Generator loss", value: genLoss } ];
+    }
+    async predictStep(data)
+    {
+        const histScales = data[0];
+        return await this.generator.predictOnBatch(gtScales);
+    }
     async fit(dataset, epochs)
     {
         if (this.isTraining)
@@ -450,7 +466,6 @@ class Combined
             for (let epoch = 0; epoch < epochs; ++epoch)
             {
                 let dataIterator = await dataset.backend.iterator();
-                let stepsDone = 0;
                 while (true)
                 {
                     const iteratorOut = dataIterator.next();
@@ -459,7 +474,6 @@ class Combined
                         const data = iteratorOut.value;
                         const out = this.trainStep(data);
                         tf.dispose(data);
-                        stepsDone++;
                     }
                     if (iteratorOut.done)
                         break;
@@ -469,6 +483,58 @@ class Combined
         finally
         {
             this.isTraining = false;
+        }
+    }
+    async evaluate(dataset, steps)
+    {
+        if (this.isTraining)
+            throw new Error("model is already training");
+        this.isTraining = true;
+        try
+        {
+            let dataIterator = await dataset.backend.iterator();
+            for (let step = 0; step < steps; ++step)
+            {
+                const iteratorOut = dataIterator.next();
+                if (iteratorOut.value != null)
+                {
+                    const data = iteratorOut.value;
+                    const out = this.testStep(data);
+                    tf.dispose(data);
+                }
+                if (iteratorOut.done)
+                    break;
+            }
+        }
+        finally
+        {
+            this.isTraining = false;
+        }
+    }
+    async predict(dataset, iterations)
+    {
+        if (this.isPredicting)
+            throw new Error("model is already training");
+        this.isPredicting = true;
+        try
+        {
+            let dataIterator = await dataset.backend.iterator();
+            for (let iteration = 0; iteration < iterations; ++iteration)
+            {
+                const iteratorOut = dataIterator.next();
+                if (iteratorOut.value != null)
+                {
+                    const data = iteratorOut.value;
+                    const out = this.predictStep(data);
+                    tf.dispose(data);
+                }
+                if (iteratorOut.done)
+                    break;
+            }
+        }
+        finally
+        {
+            this.isPredicting = false;
         }
     }
     dispose()

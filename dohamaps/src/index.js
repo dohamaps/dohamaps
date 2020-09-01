@@ -2,15 +2,15 @@
 import * as tf from "@tensorflow/tfjs-node";
 import * as osPath from "path";
 
-export import * as util from "./util";
-export import * as image from "./image";
-export import * as io from "./io"
-export import * as data from "./data";
-export import * as layers from "./layers";
-export import * as models from "./models";
-export import * as metrics from "./metrics";
-export import * as losses from "./losses";
-export import * as memory from "./memory";
+export * from "./util";
+export * from "./image";
+export * from "./io"
+export * from "./data";
+export * from "./layers";
+export * from "./models";
+export * from "./metrics";
+export * from "./losses";
+export * from "./memory";
 
 export async function processClips(numClips, clipLen, loadPath, savePath, dimensions)
 {
