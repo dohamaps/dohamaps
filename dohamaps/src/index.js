@@ -2,15 +2,16 @@
 import * as tf from "@tensorflow/tfjs-node";
 import * as osPath from "path";
 
-export * from "./util";
-export * from "./image";
-export * from "./io"
-export * from "./data";
-export * from "./layers";
-export * from "./models";
-export * from "./metrics";
-export * from "./losses";
-export * from "./memory";
+import * as util from "./util";
+import * as image from "./image";
+import * as io from "./io";
+import * as data from "./data";
+import * as layers from "./layers";
+import * as models from "./models";
+import * as metrics from "./metrics";
+import * as losses from "./losses";
+import * as memory from "./memory";
+import * as initializers from "./initializers";
 
 export async function processClips(numClips, clipLen, loadPath, savePath, dimensions)
 {
@@ -83,4 +84,18 @@ export async function train(args)
     gan.compile();
     await gan.fit(dataset, args.epochs);
     gan.dispose();
+}
+
+export
+{
+    util,
+    image,
+    io,
+    data,
+    layers,
+    models,
+    metrics,
+    losses,
+    memory,
+    initializers
 }
